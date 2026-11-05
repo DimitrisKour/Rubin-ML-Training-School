@@ -1,0 +1,29 @@
+# Packages for the Rubin ML Training School 2026.
+# Install with: pip install -r requirements.txt
+
+# Alert streams (Day 1)
+babamul==0.2.0
+python-dotenv
+
+# Machine learning frameworks (Days 1-3)
+hyrax==0.13.1
+torch
+onnx
+onnxscript
+onnxruntime
+scikit-learn
+
+# AppleCiDEr and LUNA (Day 2)
+git+https://github.com/applecider-ml/applecider
+git+https://github.com/asasli/luna
+
+# Scientific Python and notebooks
+numpy
+pandas
+pyarrow
+astropy
+matplotlib
+tqdm
+jupyterlab
+ipykernel
+ipywidgets

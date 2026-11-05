@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hands-On Anomaly Detection with AppleCiDEr and Hyrax | Rubin ML Training School 2026</title>
+<meta name="description" content="A LINCC Frameworks training school on transient classification, anomaly detection, and similarity search with AppleCiDEr and Hyrax. November 9–11, 2026, University of Minnesota, Minneapolis.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e1320; --surface:#151b2b; --bg2:#1a2133; --ink:#e8ebf2; --soft:#b0b7c6; --faint:#8b93a5; --rule:#283147;
+  --link:#9aa9ff; --signal:#ff7fb2; --teal:#5ccabf; --amber:#e8b54a; --on-link:#0e1320;
+  --serif:'Newsreader','Iowan Old Style','Palatino Linotype',Georgia,serif;
+  --sans:'Instrument Sans','Segoe UI','Helvetica Neue',Arial,sans-serif;
+  color-scheme:dark; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1320; --surface:#151b2b; --bg2:#1a2133; --ink:#e8ebf2; --soft:#b0b7c6; --faint:#8b93a5; --rule:#283147;
+    --link:#9aa9ff; --signal:#ff7fb2; --teal:#5ccabf; --amber:#e8b54a; --on-link:#0e1320; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1320; --surface:#151b2b; --bg2:#1a2133; --ink:#e8ebf2; --soft:#b0b7c6; --faint:#8b93a5; --rule:#283147;
+  --link:#9aa9ff; --signal:#ff7fb2; --teal:#5ccabf; --amber:#e8b54a; --on-link:#0e1320; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:1.15rem;line-height:1.62;font-optical-sizing:auto}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.2;margin:0;color:var(--ink)}
+a{color:var(--link);text-decoration-thickness:1px;text-underline-offset:.18em}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--link);outline-offset:3px;border-radius:2px}
+img,svg{max-width:100%}
+.wrap{max-width:60rem;margin:0 auto;padding:0 1.5rem}
+
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--rule)}
+header.top .wrap{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.4rem 2rem;padding-top:1rem;padding-bottom:.8rem}
+.brand{font-family:var(--serif);font-size:1.3rem;color:var(--ink);text-decoration:none;white-space:nowrap}
+nav.main{display:flex;flex-wrap:wrap;align-items:baseline;gap:.3rem 1.25rem;font-family:var(--sans);font-size:.95rem}
+nav.main ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.3rem 1.25rem}
+nav.main a{color:var(--soft);text-decoration:none;padding:.15rem 0;border-bottom:1px solid transparent}
+nav.main a:hover{color:var(--ink);border-bottom-color:var(--rule)}
+.theme-toggle{font:inherit;font-size:.9rem;color:var(--faint);background:none;border:0;padding:.15rem 0;cursor:pointer}
+.theme-toggle:hover{color:var(--ink)}
+@media (max-width:720px){nav.main ul{display:none}}
+
+.hero{padding:3.5rem 0 3.5rem;border-bottom:1px solid var(--rule)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:2.5rem;align-items:center}
+@media (max-width:880px){.hero .wrap{grid-template-columns:1fr}}
+.hero .when{font-family:var(--sans);font-size:1rem;color:var(--signal);margin:0 0 .9rem}
+.hero h1{font-size:clamp(2.4rem,5.5vw,3.6rem);font-weight:300;letter-spacing:-.02em;margin-bottom:1rem}
+.hero .sub{font-size:1.3rem;line-height:1.5;color:var(--soft);max-width:34em;margin:0 0 1.3rem}
+.hero .where{font-family:var(--sans);font-size:.95rem;color:var(--faint);margin:0 0 1.8rem}
+.btns{display:flex;gap:.75rem;flex-wrap:wrap;font-family:var(--sans)}
+.btn{display:inline-block;padding:.6rem 1.1rem;border-radius:3px;text-decoration:none;font-weight:500;font-size:.95rem}
+.btn.primary{background:var(--link);color:var(--on-link)}
+.btn.secondary{border:1px solid var(--rule);color:var(--ink);background:var(--surface)}
+.btn:hover{text-decoration:none;filter:brightness(1.06)}
+.lc{width:100%;height:auto;display:block}
+.lc-caption{font-family:var(--sans);font-size:.85rem;color:var(--faint);margin:.75rem 0 0;line-height:1.5}
+.lc-caption span{color:var(--signal)}
+
+section{padding:3.5rem 0;border-bottom:1px solid var(--rule)}
+section h2{font-size:1.9rem;margin-bottom:1.3rem}
+.prose{max-width:42rem}
+.prose p{margin:0 0 1rem}
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.8rem 3rem}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+.goal{border-top:1px solid var(--rule);padding-top:.9rem}
+.goal h3{font-size:1.25rem;margin-bottom:.35rem}
+.goal p{margin:0;color:var(--soft);font-size:1.05rem}
+
+.tz{font-family:var(--sans);font-size:.95rem;color:var(--faint);margin:-.5rem 0 1.4rem}
+.tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem;font-family:var(--sans)}
+.tab{font:inherit;font-weight:500;padding:.55rem 1rem;border-radius:3px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);cursor:pointer;text-align:left;line-height:1.3}
+.tab small{display:block;font-weight:400;color:var(--faint);font-size:.82rem}
+.tab[aria-selected="true"]{background:var(--link);border-color:var(--link);color:var(--on-link)}
+.tab[aria-selected="true"] small{color:var(--on-link);opacity:.85}
+.day h3{font-size:1.5rem;margin-bottom:.3rem}
+.day .theme{font-family:var(--sans);font-size:.95rem;color:var(--faint);margin:0 0 1.2rem}
+.sched-scroll{overflow-x:auto}
+.sched{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--rule);border-radius:4px}
+.sched td{padding:.75rem 1rem;border-top:1px solid var(--rule);vertical-align:top}
+.sched tr:first-child td{border-top:0}
+.sched td.t{white-space:nowrap;font-family:var(--sans);font-size:.9rem;color:var(--faint);font-variant-numeric:tabular-nums;width:8rem;padding-top:.95rem}
+.sched .s{color:var(--ink)}
+.sched .who{display:block;font-family:var(--sans);font-size:.9rem;color:var(--signal);margin-top:.15rem}
+.sched tr.light td{background:var(--bg2)}
+.sched tr.light .s{color:var(--soft)}
+
+.people{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem}
+.person{border-top:1px solid var(--rule);padding:.7rem 0}
+.person b{display:block;font-weight:400;font-size:1.15rem}
+.person span{font-family:var(--sans);color:var(--soft);font-size:.9rem}
+
+.info dt{font-family:var(--sans);font-weight:600;font-size:1rem;margin-top:1.2rem}
+.info dd{margin:.2rem 0 0;color:var(--soft)}
+.todo{background:var(--bg2);border:1px dashed var(--amber);border-radius:2px;padding:0 .3em;color:var(--amber)}
+h3.prep{font-size:1.4rem;margin:2.2rem 0 .6rem}
+.refs{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:2.5rem}
+@media (max-width:820px){.refs{grid-template-columns:1fr}}
+.refs h3{font-size:1.3rem;margin-bottom:.8rem}
+.reflist,.codelist{list-style:none;margin:0;padding:0}
+.reflist li,.codelist li{border-top:1px solid var(--rule);padding:.75rem 0;font-size:1.02rem;line-height:1.5}
+.reflist li{color:var(--soft)}
+.reflist .au{display:block;font-family:var(--sans);font-size:.88rem;color:var(--signal);margin-bottom:.15rem}
+.reflist i{color:var(--ink)}
+.codelist a{font-family:var(--sans);font-weight:600;font-size:1rem}
+.codelist span{display:block;color:var(--soft);font-size:.98rem;margin-top:.1rem}
+.steps{margin:0;padding-left:1.4rem}
+.steps li{margin:0 0 1rem;padding-left:.3rem;color:var(--soft)}
+.steps li b{font-weight:600;color:var(--ink)}
+.steps li::marker{font-family:var(--sans);color:var(--signal)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;background:var(--bg2);padding:.05em .3em;border-radius:2px}
+
+footer{padding:2.5rem 0;font-family:var(--sans);font-size:.88rem;color:var(--faint)}
+footer .wrap{display:grid;grid-template-columns:2fr 1fr 1fr;gap:2rem}
+@media (max-width:760px){footer .wrap{grid-template-columns:1fr}}
+footer h3{font-family:var(--serif);font-size:1.1rem;margin-bottom:.5rem}
+footer ul{list-style:none;padding:0;margin:0}
+footer li{margin:.2rem 0}
+footer .fine{grid-column:1/-1;border-top:1px solid var(--rule);padding-top:1.2rem}
+@media (max-width:720px){body{font-size:1.07rem}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">Rubin ML Training School 2026</a>
+    <nav class="main" aria-label="Main">
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#program">Program</a></li>
+        <li><a href="#participants">Participants</a></li>
+        <li><a href="#travel">Travel</a></li>
+        <li><a href="#papers">Papers</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <p class="when">November 9–11, 2026</p>
+      <h1>Hands-On Anomaly Detection with AppleCiDEr and Hyrax</h1>
+      <p class="sub">A three-day LINCC Frameworks training school on transient classification, anomaly detection, and similarity search, taught on ZTF alerts and carried over to Rubin Data Preview 2.</p>
+      <p class="where">School of Physics and Astronomy, University of Minnesota, Minneapolis, MN</p>
+      <div class="btns">
+        <a class="btn primary" href="#participants">Registration and preparation</a>
+        <a class="btn secondary" href="#program">See the program</a>
+      </div>
+    </div>
+    <figure style="margin:0">
+      <svg class="lc" id="lc" viewBox="0 0 560 360" role="img" aria-labelledby="lc-title">
+        <title id="lc-title">Simulated multi-band light curves of several transients, with one light curve that departs from the others highlighted</title>
+      </svg>
+      <figcaption class="lc-caption">Simulated <i>ugrizy</i> light curves. The <span>highlighted</span> source rebrightens after peak and is the kind of event the school teaches participants to find.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<section id="about">
+  <div class="wrap">
+    <h2>About the school</h2>
+    <div class="prose">
+      <p>The Vera C. Rubin Observatory alert stream has been public since February 2026, and the catalogs of Data Preview 2 (DP2), the first release built from LSST Camera images, became available to data-rights holders through the Rubin Science Platform in July 2026. Turning these data into classifications and discoveries requires machine-learning workflows that most early-career researchers have not yet had the chance to build on real survey data.</p>
+      <p>This school trains graduate students, postdocs, and early-career researchers to classify transients, detect anomalies, and search for similar events in alert data, using two tools: <i>AppleCiDEr</i>, the multimodal transient classifier and anomaly-detection pipeline developed through the LINCC Incubator, and <i>Hyrax</i>, the LINCC Frameworks framework for training and analyzing machine-learning models on survey data. Participants build each workflow on labeled Zwicky Transient Facility (ZTF) alerts during the first two days, deploy models inside the BOOM alert broker, and transfer their workflows to Rubin DP2 during a hackathon on the third day.</p>
+      <p>The school is held in person at the University of Minnesota for about 20 participants. Lunches and breaks are provided, and limited travel support is available, with priority for students and for researchers from smaller and minority-serving institutions. It is supported by the <a href="https://lsstdiscoveryalliance.org/">LSST Discovery Alliance</a> through the LINCC Frameworks Community Events program.</p>
+    </div>
+  </div>
+</section>
+
+<section id="goals">
+  <div class="wrap">
+    <h2>What participants will build</h2>
+    <div class="cols">
+      <div class="goal"><h3>Classifiers on alert data</h3><p>Train supervised classifiers for transients and variable stars on labeled ZTF alerts with AppleCiDEr, and train a light-curve model in Hyrax.</p></div>
+      <div class="goal"><h3>Anomaly detection and similarity search</h3><p>Score unusual events with AppleCiDEr and LUNA, and find analogs of a source through nearest-neighbor search in embedding space.</p></div>
+      <div class="goal"><h3>Models running in a broker</h3><p>Export models to ONNX, run them inside BOOM, and expose them to agents and SkyPortal through MCP servers.</p></div>
+      <div class="goal"><h3>Workflows transferred to Rubin DP2</h3><p>Port the ZTF workflows to DP2 light curves on the Rubin Science Platform during the hackathon, accounting for the change in bands, units, and cadence.</p></div>
+      <div class="goal"><h3>Open tutorial notebooks</h3><p>Every session ships as an openly licensed notebook in the school repository, and hackathon projects are added there as reusable examples.</p></div>
+      <div class="goal"><h3>Seeds for science proposals</h3><p>Leave with a working project on Rubin data that can grow into a proposal or a paper.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="program">
+  <div class="wrap">
+    <h2>Program</h2>
+    <p class="tz">All times are Central Time (CT). Each day opens with coffee and pastries at 9:00 AM and ends by 4:00 PM.</p>
+    <div class="tabs" role="tablist" aria-label="School days">
+      <button class="tab" role="tab" id="tab-1" aria-controls="day-1" aria-selected="true">Day 1<small>Monday, Nov 9</small></button>
+      <button class="tab" role="tab" id="tab-2" aria-controls="day-2" aria-selected="false" tabindex="-1">Day 2<small>Tuesday, Nov 10</small></button>
+      <button class="tab" role="tab" id="tab-3" aria-controls="day-3" aria-selected="false" tabindex="-1">Day 3<small>Wednesday, Nov 11</small></button>
+    </div>
+
+    <div class="day" id="day-1" role="tabpanel" aria-labelledby="tab-1">
+      <h3>Alert brokers, Hyrax, and models in BOOM</h3>
+      <p class="theme">Taught on ZTF alerts and live Rubin alerts in room 401-20.</p>
+      <div class="sched-scroll"><table class="sched"><tbody>
+        <tr class="light"><td class="t">9:00–9:30</td><td><span class="s">Coffee and pastries</span></td></tr>
+        <tr><td class="t">9:30–9:45</td><td><span class="s">Welcome and introduction</span><span class="who">Argyro Sasli and Michael Coughlin</span></td></tr>
+        <tr><td class="t">9:45–10:25</td><td><span class="s">Lecture: ZTF and Rubin alert streams with BOOM</span><span class="who">Thomas Culino</span></td></tr>
+        <tr><td class="t">10:25–11:05</td><td><span class="s">Activity: filtering ZTF and Rubin alerts with BOOM</span><span class="who">Thomas Culino</span></td></tr>
+        <tr class="light"><td class="t">11:05–11:15</td><td><span class="s">Break</span></td></tr>
+        <tr><td class="t">11:15–12:15</td><td><span class="s">Lecture and demo: Hyrax, machine learning in the LINCC ecosystem</span><span class="who">Drew Oldag</span></td></tr>
+        <tr class="light"><td class="t">12:15–1:15</td><td><span class="s">Lunch</span></td></tr>
+        <tr><td class="t">1:15–2:30</td><td><span class="s">Lecture and activity: running ML models in BOOM with ONNX</span><span class="who">Sushant Sharma Chaudhary</span></td></tr>
+        <tr class="light"><td class="t">2:30–2:45</td><td><span class="s">Break</span></td></tr>
+        <tr><td class="t">2:45–3:30</td><td><span class="s">Activity: Hyrax hands-on, setting up the ZTF light-curve dataset</span></td></tr>
+        <tr><td class="t">3:30–4:00</td><td><span class="s">Activity: Hyrax hands-on, training a light-curve model on ZTF</span><span class="who">Drew Oldag</span></td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="day" id="day-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+      <h3>Classification, anomaly detection, similarity search, and MCP servers</h3>
+      <p class="theme">Taught on labeled ZTF alerts in room 401-20.</p>
+      <div class="sched-scroll"><table class="sched"><tbody>
+        <tr class="light"><td class="t">9:00–9:30</td><td><span class="s">Coffee and pastries</span></td></tr>
+        <tr><td class="t">9:30–10:45</td><td><span class="s">Lecture and activity: AppleCiDEr, multimodal classification of ZTF transients</span><span class="who">Argyro Sasli</span></td></tr>
+        <tr class="light"><td class="t">10:45–11:00</td><td><span class="s">Break</span></td></tr>
+        <tr><td class="t">11:00–12:00</td><td><span class="s">Activity: anomaly detection with AppleCiDEr and LUNA</span><span class="who">Argyro Sasli</span></td></tr>
+        <tr class="light"><td class="t">12:00–1:00</td><td><span class="s">Lunch</span></td></tr>
+        <tr><td class="t">1:00–2:30</td><td><span class="s">Lecture and activity: similarity search in embedding space on ZTF alerts</span><span class="who">Sneha Maharjan</span></td></tr>
+        <tr class="light"><td class="t">2:30–2:45</td><td><span class="s">Break</span></td></tr>
+        <tr><td class="t">2:45–4:00</td><td><span class="s">Lecture and activity: MCP servers for BOOM and ML models</span><span class="who">Leo Conforti</span></td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="day" id="day-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+      <h3>Active learning and the DP2 hackathon</h3>
+      <p class="theme">Morning on ZTF in room 401-20, afternoon on Rubin DP2 through the Rubin Science Platform in room B55.</p>
+      <div class="sched-scroll"><table class="sched"><tbody>
+        <tr class="light"><td class="t">9:00–9:30</td><td><span class="s">Coffee and pastries</span></td></tr>
+        <tr><td class="t">9:30–10:45</td><td><span class="s">Lecture and activity: active learning for classification and follow-up on ZTF</span><span class="who">Dimitrios Kourtesis</span></td></tr>
+        <tr class="light"><td class="t">10:45–11:00</td><td><span class="s">Break</span></td></tr>
+        <tr><td class="t">11:00–11:30</td><td><span class="s">Lecture: from ZTF to Rubin, DP2 on the Rubin Science Platform</span><span class="who">Argyro Sasli</span></td></tr>
+        <tr><td class="t">11:30–12:00</td><td><span class="s">Hackathon kickoff: teams and project choice</span></td></tr>
+        <tr class="light"><td class="t">12:00–12:30</td><td><span class="s">Move to room B55</span></td></tr>
+        <tr class="light"><td class="t">12:30–1:15</td><td><span class="s">Working lunch and hackathon start</span></td></tr>
+        <tr><td class="t">1:15–3:00</td><td><span class="s">Hackathon: porting workflows to DP2 in Hyrax</span></td></tr>
+        <tr class="light"><td class="t">3:00–3:15</td><td><span class="s">Break</span></td></tr>
+        <tr><td class="t">3:15–3:45</td><td><span class="s">Lightning presentations of hackathon projects</span></td></tr>
+        <tr><td class="t">3:45–4:00</td><td><span class="s">Closing remarks</span><span class="who">Argyro Sasli and Michael Coughlin</span></td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<section id="participants">
+  <div class="wrap">
+    <h2>Participants and preparation</h2>
+    <div class="prose">
+      <p>The school is designed for graduate students, postdocs, and early-career researchers who are comfortable with Python and Jupyter notebooks. Prior experience with machine learning or with Rubin data is helpful but not required, and members of the Transient and Variable Stars Science Collaboration and new Rubin users are especially welcome.</p>
+      <dl class="info">
+        <dt>Registration</dt>
+        <dd>Selected participants receive logistics and preparation material by email. Questions about registration go to <a href="mailto:asasli@umn.edu">asasli@umn.edu</a>.</dd>
+        <dt>Travel support</dt>
+        <dd>Limited support for travel and lodging is available, with priority for students and for researchers from smaller and minority-serving institutions.</dd>
+      </dl>
+      <h3 class="prep">Before the school</h3>
+      <p>Please complete the three steps below before Monday, November 9. Account problems can take several days to resolve, so we recommend starting as soon as possible and writing to <a href="mailto:asasli@umn.edu">asasli@umn.edu</a> if any step fails.</p>
+      <ol class="steps">
+        <li><b>BOOM alert streams through Babamul.</b> Create an account on the Babamul deployment of BOOM at <a href="https://babamul.caltech.edu">babamul.caltech.edu</a>, then open your profile page, where you will find a Kafka username and password for reading the ZTF and Rubin alert streams and an API token for cross-matches, photometry, and cone searches. Keep these three values at hand: in the Day 1 activity you copy them into a <code>.env</code> file next to the notebook. A backup deployment runs at <a href="https://babamul.umn.edu">babamul.umn.edu</a>, with its own credentials on its own profile page.</li>
+        <li><b>Rubin Science Platform.</b> Log in at <a href="https://data.lsst.cloud">data.lsst.cloud</a> with your Rubin data-rights account and start a session in the Notebooks aspect once, which confirms that your account works and creates your home directory. The Day 3 hackathon runs on DP2 catalogs there. Participants without Rubin data rights work on ZTF data or on live Rubin alerts through Babamul during the hackathon.</li>
+        <li><b>Software and computing.</b> A pre-configured environment and the tutorial notebooks are distributed through the school repository at <a href="https://github.com/asasli/Rubin-ML-Training-School">github.com/asasli/Rubin-ML-Training-School</a>, with compute provided through the Minnesota Supercomputing Institute. Bring a laptop with a recent web browser and a terminal.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="travel">
+  <div class="wrap">
+    <h2>Travel and lodging</h2>
+    <div class="prose">
+      <dl class="info">
+        <dt>Venue</dt>
+        <dd>School of Physics and Astronomy, University of Minnesota, John T. Tate Hall, 116 Church St SE, Minneapolis, MN 55455: room 401-20 on Monday, Tuesday, and Wednesday morning, and room B55 on Wednesday afternoon.</dd>
+        <dt>Getting there</dt>
+        <dd>Minneapolis–Saint Paul International Airport (MSP) is connected to campus by the METRO light rail: take the Blue Line to downtown Minneapolis and transfer to the Green Line toward Saint Paul, getting off at East Bank station.</dd>
+        <dt>Lodging</dt>
+        <dd>We cover up to three nights of accommodation in Minneapolis for participants who requested lodging support at registration. The organizers make these reservations on your behalf, so please reply to the lodging email with the nights you need and your full name as it appears on your ID, and do not book a hotel yourself. Questions about lodging go to <a href="mailto:asasli@umn.edu">asasli@umn.edu</a>.</dd>
+        <dt>Weather</dt>
+        <dd>Minneapolis in early November is often cold, so please pack a warm coat.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section id="papers">
+  <div class="wrap">
+    <h2>Featured papers and code</h2>
+    <div class="refs">
+      <div>
+        <h3>Papers</h3>
+        <ol class="reflist">
+          <li><span class="au">Sasli, A., and Coughlin, M. 2026</span> <i>Anomaly-ranked confirmation slows new-class learning</i> <a href="https://arxiv.org/abs/2611.03250">arXiv:2611.03250</a></li>
+          <li><span class="au">Sasli, A., et al. 2026</span> <i>Photometric classification and out-of-taxonomy detection of ZTF transients with FLARE</i> <a href="https://arxiv.org/abs/2610.30656">arXiv:2610.30656</a></li>
+          <li><span class="au">Sasli, A., et al. 2026</span> <i>Catching Disguised Transients with ASTRANet: Anomaly-Aware Spectroscopic Classification and Conformal Calibration</i> <a href="https://arxiv.org/abs/2607.08044">arXiv:2607.08044</a></li>
+          <li><span class="au">Junell, A., Sasli, A., et al. 2025</span> <i>Applying multimodal learning to Classify transient Detections Early (AppleCiDEr) I: Data set, methods, and infrastructure</i> <a href="https://arxiv.org/abs/2507.16088">arXiv:2507.16088</a></li>
+          <li><span class="au">Jegou du Laz, T., et al. 2026</span> <i>BOOM and Babamul: a real-time, multi-survey, optical alert broker system operating at scale</i> PASP, 138, 064503, <a href="https://arxiv.org/abs/2511.00164">arXiv:2511.00164</a></li>
+          <li><span class="au">Ghosh, A., Oldag, D., Tauraso, M., et al. 2026</span> <i>Hyrax: An Extensible Framework for Rapid ML Experimentation and Unsupervised Discovery in the Era of Rubin, Roman, and Euclid</i> <a href="https://arxiv.org/abs/2605.18959">arXiv:2605.18959</a></li>
+          <li><span class="au">Bom, C. R., Mahabal, A., Bianco, F., et al. 2026</span> <i>Toward decision-aware AI for LSST-scale time-domain astronomy</i> <a href="https://arxiv.org/abs/2606.05285">arXiv:2606.05285</a></li>
+          <li><span class="au">Coughlin, M. W., et al. 2023</span> <i>A Data Science Platform to Enable Time-domain Astronomy</i> ApJS, 267, 31, <a href="https://arxiv.org/abs/2305.00108">arXiv:2305.00108</a></li>
+          <li><span class="au">van der Walt, S. J., Crellin-Quick, A., and Bloom, J. S. 2019</span> <i>SkyPortal: An Astronomical Data Platform</i> JOSS, 4, 1247, <a href="https://doi.org/10.21105/joss.01247">doi:10.21105/joss.01247</a></li>
+        </ol>
+      </div>
+      <div>
+        <h3>Code</h3>
+        <ul class="codelist">
+          <li><a href="https://github.com/applecider-ml/applecider">AppleCiDEr</a> <span>Multimodal transient classifier and anomaly-detection pipeline developed through the LINCC Incubator</span></li>
+          <li><a href="https://github.com/applecider-ml/flare">FLARE</a> <span>Photometric classification and anomaly-detection module of AppleCiDEr, running in production on Fritz</span></li>
+          <li><a href="https://github.com/asasli/luna">LUNA</a> <span>Classifier-agnostic library for novelty and anomaly detection on model embeddings and logits</span></li>
+          <li><a href="https://github.com/boom-astro/boom">BOOM</a> <span>Multi-survey alert broker for ZTF and Rubin, written in Rust</span></li>
+          <li><a href="https://github.com/boom-astro/babamul">Babamul</a> <span>Python client for the public Babamul alert streams built on BOOM</span></li>
+          <li><a href="https://github.com/skyportal/skyportal">SkyPortal</a> <span>Open-source platform for discovering, following up, and characterizing transients</span></li>
+          <li><a href="https://github.com/lincc-frameworks/hyrax">Hyrax</a> <span>LINCC Frameworks framework for training and analyzing machine-learning models on survey data</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h3>Hands-On Anomaly Detection with AppleCiDEr and Hyrax</h3>
+      <p style="margin:0">A Rubin time-domain machine-learning training school, November 9–11, 2026, University of Minnesota, Minneapolis. Supported by the <a href="https://lsstdiscoveryalliance.org/">LSST Discovery Alliance</a> through the LINCC Frameworks Community Events program.</p>
+    </div>
+    <div>
+      <h3>Pages</h3>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#program">Program</a></li>
+        <li><a href="#participants">Participants</a></li>
+        <li><a href="#travel">Travel</a></li>
+        <li><a href="#papers">Papers and code</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Contact</h3>
+      <ul><li><a href="mailto:asasli@umn.edu">asasli@umn.edu</a></li></ul>
+    </div>
+    <p class="fine">Organized by Argyro Sasli, Michael Coughlin, and Drew Oldag.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Program tabs
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  function select(tab){
+    tabs.forEach(function(t){
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+  }
+  tabs.forEach(function(t, i){
+    t.addEventListener('click', function(){ select(t); });
+    t.addEventListener('keydown', function(e){
+      var j = null;
+      if (e.key === 'ArrowRight') j = (i + 1) % tabs.length;
+      if (e.key === 'ArrowLeft') j = (i - 1 + tabs.length) % tabs.length;
+      if (j !== null){ e.preventDefault(); tabs[j].focus(); select(tabs[j]); }
+    });
+  });
+
+  // Theme toggle, as on asasli's site
+  var tb = document.querySelector('.theme-toggle');
+  if (tb){
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    var cur = function(){ var a = document.documentElement.getAttribute('data-theme'); return a ? a : (mq.matches ? 'dark' : 'light'); };
+    var label = function(){ var c = cur(); tb.textContent = c === 'dark' ? 'Light theme' : 'Dark theme'; tb.setAttribute('aria-pressed', c === 'dark'); };
+    tb.addEventListener('click', function(){ var n = cur() === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', n); try{ localStorage.setItem('theme', n); }catch(e){} label(); });
+    label();
+  }
+
+  // Hero light curves
+  var svg = document.getElementById('lc');
+  var NS = 'http://www.w3.org/2000/svg';
+  var W = 560, H = 360, padL = 30, padR = 16, padT = 18, padB = 34;
+  var seed = 7;
+  function rand(){ seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+  function gauss(){ return Math.sqrt(-2 * Math.log(rand() + 1e-9)) * Math.cos(2 * Math.PI * rand()); }
+  var bands = ['var(--link)','var(--teal)','var(--faint)','var(--amber)','var(--soft)','var(--faint)'];
+  function x(t){ return padL + (t / 120) * (W - padL - padR); }
+  function y(f){ return H - padB - f * (H - padT - padB); }
+  function sn(t, t0, amp, rise, fall){
+    if (t < t0 - 3 * rise) return 0;
+    var d = t - t0;
+    return amp * Math.exp(-Math.max(d, 0) / fall) / (1 + Math.exp(-d / rise));
+  }
+  function el(name, attrs){ var e = document.createElementNS(NS, name); for (var k in attrs){ var v = attrs[k]; if (typeof v === 'string' && v.indexOf('var(') === 0) e.style.setProperty(k, v); else e.setAttribute(k, v); } svg.appendChild(e); return e; }
+
+  el('line', {x1: padL, y1: H - padB, x2: W - padR, y2: H - padB, stroke: 'var(--rule)', 'stroke-width': 1});
+  el('line', {x1: padL, y1: padT, x2: padL, y2: H - padB, stroke: 'var(--rule)', 'stroke-width': 1});
+  var tx = el('text', {x: (W + padL) / 2, y: H - 10, fill: 'var(--faint)', 'font-size': 13, 'text-anchor': 'middle', 'font-family': 'Instrument Sans, sans-serif'}); tx.textContent = 'Days since first detection';
+  var ty = el('text', {x: 14, y: (H - padB + padT) / 2, fill: 'var(--faint)', 'font-size': 13, 'text-anchor': 'middle', transform: 'rotate(-90 14 ' + ((H - padB + padT) / 2) + ')', 'font-family': 'Instrument Sans, sans-serif'}); ty.textContent = 'Flux';
+
+  var pts = [];
+  var normals = [
+    {t0: 22, amp: .62, rise: 3, fall: 22},
+    {t0: 34, amp: .48, rise: 4, fall: 30},
+    {t0: 18, amp: .40, rise: 2.5, fall: 16},
+    {t0: 45, amp: .55, rise: 5, fall: 35},
+    {t0: 28, amp: .33, rise: 3.5, fall: 26}
+  ];
+  normals.forEach(function(p){
+    for (var t = 0; t < 120; t += 2.2 + rand() * 3.5){
+      var b = Math.floor(rand() * 6);
+      var f = sn(t, p.t0, p.amp * (0.75 + 0.1 * b / 2), p.rise, p.fall) + 0.012 * gauss();
+      pts.push({t: t, f: Math.max(f, 0.004), c: bands[b], r: 2.6, o: 0.45, odd: false});
+    }
+  });
+  for (var t = 0; t < 120; t += 2 + rand() * 2.6){
+    var f = sn(t, 26, .7, 3, 18) + sn(t, 70, .42, 4, 20) + 0.012 * gauss();
+    pts.push({t: t, f: Math.max(f, 0.004), c: 'var(--signal)', r: 3.6, o: 1, odd: true});
+  }
+  pts.sort(function(a, b){ return a.t - b.t; });
+
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  pts.forEach(function(p){
+    var c = el('circle', {cx: x(p.t).toFixed(1), cy: y(p.f).toFixed(1), r: p.r, 'fill-opacity': p.o}); c.style.fill = p.c;
+    if (!reduce){
+      c.style.opacity = 0;
+      c.style.transition = 'opacity 300ms ease';
+      setTimeout(function(){ c.style.opacity = 1; }, 200 + p.t * 14);
+    }
+  });
+  var ring = el('circle', {cx: x(70).toFixed(1), cy: y(sn(70, 26, .7, 3, 18) + .42 * .5).toFixed(1), r: 22, fill: 'none', stroke: 'var(--signal)', 'stroke-width': 1.5, 'stroke-dasharray': '4 4'});
+  if (!reduce){ ring.style.opacity = 0; ring.style.transition = 'opacity 500ms ease'; setTimeout(function(){ ring.style.opacity = 1; }, 200 + 120 * 14); }
+})();
+</script>
+</body>
+</html>
