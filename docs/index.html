@@ -174,7 +174,7 @@ footer .fine{grid-column:1/-1;border-top:1px solid var(--rule);padding-top:1.2re
     <h2>About the school</h2>
     <div class="prose">
       <p>The Vera C. Rubin Observatory alert stream has been public since February 2026, and the catalogs of Data Preview 2 (DP2), the first release built from LSST Camera images, became available to data-rights holders through the Rubin Science Platform in July 2026. Turning these data into classifications and discoveries requires machine-learning workflows that most early-career researchers have not yet had the chance to build on real survey data.</p>
-      <p>This school trains graduate students, postdocs, and early-career researchers to classify transients, detect anomalies, and search for similar events in alert data, using two tools: <i>AppleCiDEr</i>, the multimodal transient classifier and anomaly-detection pipeline developed through the LINCC Incubator, and <i>Hyrax</i>, the LINCC Frameworks framework for training and analyzing machine-learning models on survey data. Participants build each workflow on labeled Zwicky Transient Facility (ZTF) alerts during the first two days, deploy models inside the BOOM alert broker, and transfer their workflows to Rubin DP2 during a hackathon on the third day.</p>
+      <p>This school trains graduate students, postdocs, and early-career researchers to classify transients, detect anomalies, and search for similar events in alert data, using two tools: <i>AppleCiDEr</i>, the multimodal transient classifier and anomaly-detection pipeline developed through the LINCC Incubator, and <i>Hyrax</i>, the LINCC Frameworks framework for training and analyzing machine-learning models on survey data. Participants build each workflow on labeled Zwicky Transient Facility (ZTF) alerts during the first two days, filter live alerts through the BOOM alert broker, and transfer their workflows to Rubin DP2 during a hackathon on the third day.</p>
       <p>The school is held in person at the University of Minnesota for about 20 participants. Lunches and breaks are provided, and limited travel support is available, with priority for students and for researchers from smaller and minority-serving institutions. It is supported by the <a href="https://lsstdiscoveryalliance.org/">LSST Discovery Alliance</a> through the LINCC Frameworks Community Events program.</p>
     </div>
   </div>
@@ -186,7 +186,7 @@ footer .fine{grid-column:1/-1;border-top:1px solid var(--rule);padding-top:1.2re
     <div class="cols">
       <div class="goal"><h3>Classifiers on alert data</h3><p>Train supervised classifiers for transients and variable stars on labeled ZTF alerts with AppleCiDEr, and train a light-curve model in Hyrax.</p></div>
       <div class="goal"><h3>Anomaly detection and similarity search</h3><p>Score unusual events with AppleCiDEr and LUNA, and find analogs of a source through nearest-neighbor search in embedding space.</p></div>
-      <div class="goal"><h3>Models running in a broker</h3><p>Export models to ONNX, run them inside BOOM, and expose them to agents and SkyPortal through MCP servers.</p></div>
+      <div class="goal"><h3>Alert filtering in a broker</h3><p>Query and filter live ZTF and Rubin alerts through the Babamul API of BOOM, and expose models to agents and SkyPortal through MCP servers.</p></div>
       <div class="goal"><h3>Workflows transferred to Rubin DP2</h3><p>Port the ZTF workflows to DP2 light curves on the Rubin Science Platform during the hackathon, accounting for the change in bands, units, and cadence.</p></div>
       <div class="goal"><h3>Open tutorial notebooks</h3><p>Every session ships as an openly licensed notebook in the school repository, and hackathon projects are added there as reusable examples.</p></div>
       <div class="goal"><h3>Seeds for science proposals</h3><p>Leave with a working project on Rubin data that can grow into a proposal or a paper.</p></div>
@@ -210,12 +210,12 @@ footer .fine{grid-column:1/-1;border-top:1px solid var(--rule);padding-top:1.2re
       <div class="sched-scroll"><table class="sched"><tbody>
         <tr class="light"><td class="t">9:00–9:30</td><td><span class="s">Coffee and pastries</span></td></tr>
         <tr><td class="t">9:30–9:45</td><td><span class="s">Welcome and introduction</span><span class="who">Argyro Sasli and Michael Coughlin</span></td></tr>
-        <tr><td class="t">9:45–10:25</td><td><span class="s">Lecture: ZTF and Rubin alert streams with BOOM</span><span class="who">Thomas Culino</span></td></tr>
-        <tr><td class="t">10:25–11:05</td><td><span class="s">Activity: filtering ZTF and Rubin alerts with BOOM</span><span class="who">Thomas Culino</span></td></tr>
+        <tr><td class="t">9:45–10:25</td><td><span class="s">Lecture: ZTF and Rubin alert streams with BOOM</span><span class="who">Sushant Sharma Chaudhary</span></td></tr>
+        <tr><td class="t">10:25–11:05</td><td><span class="s">Lecture: Babamul and its features</span><span class="who">Thomas Culino</span></td></tr>
         <tr class="light"><td class="t">11:05–11:15</td><td><span class="s">Break</span></td></tr>
         <tr><td class="t">11:15–12:15</td><td><span class="s">Lecture and demo: Hyrax, machine learning in the LINCC ecosystem</span><span class="who">Drew Oldag</span></td></tr>
         <tr class="light"><td class="t">12:15–1:15</td><td><span class="s">Lunch</span></td></tr>
-        <tr><td class="t">1:15–2:30</td><td><span class="s">Lecture and activity: running ML models in BOOM with ONNX</span><span class="who">Sushant Sharma Chaudhary</span></td></tr>
+        <tr><td class="t">1:15–2:30</td><td><span class="s">Activity: Babamul API usage and alert filtering</span><span class="who">Thomas Culino</span></td></tr>
         <tr class="light"><td class="t">2:30–2:45</td><td><span class="s">Break</span></td></tr>
         <tr><td class="t">2:45–3:30</td><td><span class="s">Activity: Hyrax hands-on, setting up the ZTF light-curve dataset</span></td></tr>
         <tr><td class="t">3:30–4:00</td><td><span class="s">Activity: Hyrax hands-on, training a light-curve model on ZTF</span><span class="who">Drew Oldag</span></td></tr>
