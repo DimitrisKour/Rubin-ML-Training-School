@@ -37,12 +37,12 @@ All times are Central Time (CT). Every day opens with **Coffee & Pastries, 9:00�
 |-------------|---------|----------|
 | 9:00–9:30   | Coffee & Pastries | |
 | 9:30–9:45   | **Welcome and introduction**: Argyro Sasli & Michael Coughlin | |
-| 9:45–10:25  | **Lecture: ZTF and Rubin alert streams with BOOM**: Thomas Culino | [`day1/01_boom_alert_streams`](day1/01_boom_alert_streams) |
-| 10:25–11:05 | **Activity: Filtering ZTF and Rubin alerts with BOOM**: Thomas Culino | [`day1/01_boom_alert_streams`](day1/01_boom_alert_streams) |
+| 9:45–10:25  | **Lecture: ZTF and Rubin alert streams with BOOM**: Sushant Sharma Chaudhary | [`day1/01_boom_alert_streams`](day1/01_boom_alert_streams) |
+| 10:25–11:05 | **BABAMUL and its various features**: Thomas Culino | [`day1/01_boom_alert_streams`](day1/01_boom_alert_streams) |
 | 11:05–11:15 | Break | |
 | 11:15–12:15 | **Lecture and demo: Hyrax, machine learning in the LINCC ecosystem**: Drew Oldag | [`day1/02_hyrax`](day1/02_hyrax) |
 | 12:15–1:15  | Lunch | |
-| 1:15–2:30   | **Lecture / Activity: Running ML models in BOOM with ONNX**: Sushant Sharma Chaudhary | [`day1/03_onnx_in_boom`](day1/03_onnx_in_boom) |
+| 1:15–2:30   | **Activity: BABAMUL api usage and alert filtering **: Thomas Culino | [`day1/03_onnx_in_boom`](day1/03_onnx_in_boom) |
 | 2:30–2:45   | Break | |
 | 2:45–3:30   | **Activity: Hyrax hands-on, setting up the ZTF light-curve dataset** | [`day1/02_hyrax`](day1/02_hyrax) |
 | 3:30–4:00   | **Activity: Hyrax hands-on, training a light-curve model on ZTF**: Drew Oldag | [`day1/02_hyrax`](day1/02_hyrax) |
