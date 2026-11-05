@@ -7,6 +7,10 @@ This repository holds the schedule, setup instructions, and tutorial notebooks o
 
 The school is supported by the [LSST Discovery Alliance](https://lsstdiscoveryalliance.org/) through the LINCC Frameworks Community Events program.
 
+## Registration
+
+Registration takes place through the [school registration form](https://forms.gle/131QcEVjUtkckCvb8), and selected participants receive logistics and preparation material by email.
+
 ## Before the school
 
 Please complete the three steps below before Monday, November 9. Account problems can take several days to resolve, so start as soon as possible and write to [asasli@umn.edu](mailto:asasli@umn.edu) if any step fails. The full instructions are in [`setup/README.md`](setup/README.md).
