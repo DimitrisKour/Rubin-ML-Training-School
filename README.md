@@ -108,11 +108,7 @@ DP2 is proprietary to Rubin data-rights holders. DP2 data, including light curve
 
 ## Organizers and contact
 
-The school is organized by Argyro Sasli and Michael Coughlin (University of Minnesota) with Drew Oldag (LINCC Frameworks). Questions go to [asasli@umn.edu](mailto:asasli@umn.edu).
-
-## Acknowledgments
-
-We thank Sushant Sharma Chaudhary, Sneha Maharjan, Sougat Dasgupta, Vaidehi Gupta, Tyler Barna, and Hal Yngve for their help with the organization of the school.
+The school is organized by Argyro Sasli, Michael Coughlin, Drew Oldag, Sushant Sharma Chaudhary, Sneha Maharjan, Sougat Dasgupta, Vaidehi Gupta, Tyler Barna, and Hal Yngve. Questions go to [asasli@umn.edu](mailto:asasli@umn.edu).
 
 ## License
 
