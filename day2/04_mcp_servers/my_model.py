@@ -5,7 +5,7 @@ decorated with `@tool()` becomes a tool the agent can call. `babamul(ctx)`
 fetches data from BOOM with the caller's Babamul token.
 
 `color_change` below works as-is. Replace it with your own model, or add yours
-next to it; there is a sketch for the LUNA pipeline at the bottom.
+next to it. At the bottom there is a commented example for the LUNA pipeline.
 """
 
 from mcp.server.mcpserver import Context
@@ -40,19 +40,38 @@ async def color_change(ctx: Context, object_id: str) -> dict:
     return {"object_id": object_id, "first": pairs[0], "latest": pairs[-1], "change": round(change, 3), "verdict": verdict}
 
 
-# A sketch with the LUNA pipeline from this morning. `my_features` is the part
-# that depends on your model: it turns a BOOM object into the embeddings and
-# logits LUNA expects.
+# Example only: the LUNA pipeline from this morning as a tool.
 #
-# from luna import LUNAPipeline
+# Everything below is commented out, so the server does not run any of it. To
+# try it, uncomment it, set LUNA_FILE to the pipeline you saved this morning,
+# and write my_features() for your model. The import and the load happen
+# inside the tool, so a missing file or package fails that one call, not the
+# whole server.
 #
-# pipe = LUNAPipeline.load("luna_ztf.pkl")  # load once, when the server starts
+# import functools
+#
+# LUNA_FILE = "luna_ztf.pkl"
+#
+#
+# @functools.cache
+# def luna_pipeline():
+#     from luna import LUNAPipeline  # comes with the school's requirements.txt
+#
+#     return LUNAPipeline.load(LUNA_FILE)
+#
+#
+# def my_features(obj: dict) -> dict:
+#     """One BOOM object as the input your LUNA pipeline was trained on: a dict
+#     of arrays, such as "embeddings" and "logits", plus "object_id" if you
+#     calibrated per object. This is the part that depends on your model."""
+#     raise NotImplementedError("Turn obj into your model's features here.")
 #
 #
 # @tool()
 # async def luna_anomaly(ctx: Context, object_id: str) -> dict:
-#     """How unusual this object is to the LUNA pipeline trained this morning.
-#     A small p-value means anomalous."""
+#     """How unusual this ZTF object is to the LUNA pipeline trained this morning.
+#     p_value is a conformal p-value: a small value (below 0.01, say) means
+#     anomalous, and flagged is True when LUNA calls it an anomaly."""
 #     obj = await babamul(ctx).get(f"/surveys/ZTF/objects/{object_id}")
-#     out = pipe.predict(my_features(obj))
-#     return {"object_id": object_id, "p_value": float(out["p_value"][0])}
+#     out = luna_pipeline().predict(my_features(obj))
+#     return {"object_id": object_id, "p_value": float(out["p_value"][0]), "flagged": bool(out["flagged"][0])}
