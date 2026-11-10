@@ -4,12 +4,14 @@
 
 An MCP server gives a language model tools it can call. In this session you use one for BOOM: alert search, light curves, cutouts, cross-matches and similar objects. You try it in the browser and from Python, write the agent loop yourself, and add your own model as a tool.
 
-Everything runs on our own BOOM and Babamul, set up for this session. Below, `<site>` is the site URL on your slip.
+Everything runs on our own BOOM and Babamul, set up for this session. Below, `<site>` is the site URL shown on the slide (it is also on the paper slips).
 
 ## What to bring
 
 - Your laptop with the `rubin-ml-school` environment from Day 1.
-- The paper slip from your seat. It has the site URL (`https://<something>.trycloudflare.com`), an email and a password for the website, and a seat token that starts with `bbml_`.
+- The site URL (`https://<something>.trycloudflare.com`), shown on the slide.
+- A way to sign in on the site: your Google account, or the paper slip from your seat, which has an email and a password.
+- A Babamul token that starts with `bbml_`, for the notebook and MCP clients. The slip has one. If you sign in with Google, make one on the site: open your account menu, then **Profile**, then **Create New** under **API Tokens**, and copy the token when it appears.
 
 Your Day 1 Babamul token is for babamul.caltech.edu and does not work on our site. Leave it where it is. Nothing in this session changes it or `setup/.env`.
 
@@ -22,7 +24,7 @@ Your Day 1 Babamul token is for babamul.caltech.edu and does not work on our sit
 ## Setup
 
 1. Pull the latest version of this repository.
-2. Optional: in this folder, copy `.env.example` to `.env` and fill in `SESSION_BOOM_URL` and `SESSION_BABAMUL_TOKEN` from your slip. Git ignores `.env`. If you skip this, the notebook asks.
+2. Optional: in this folder, copy `.env.example` to `.env` and fill in `SESSION_BOOM_URL` and `SESSION_BABAMUL_TOKEN` (the site URL and your token). Git ignores `.env`. If you skip this, the notebook asks.
 3. Open `mcp_servers.ipynb` with the `rubin-ml-school` kernel and run the first cell. It installs `mcp` and `boom-mcp` if they are missing. To install them yourself:
 
    ```bash
@@ -33,11 +35,11 @@ Your Day 1 Babamul token is for babamul.caltech.edu and does not work on our sit
 
 ### The Ask panel
 
-Open `<site>` in a browser, log in with the email and password on your slip, and press **Ask** in the header. Nothing to install. Each tool call shows up as a chip you can open.
+Open `<site>` in a browser, sign in with Google or with the email and password on your slip, and press **Ask** in the header. Nothing to install. Each tool call shows up as a chip you can open.
 
 ### Your own MCP client
 
-The MCP server is at `<site>/mcp` (Streamable HTTP). Send your seat token in the header `Authorization: Bearer bbml_...`.
+The MCP server is at `<site>/mcp` (Streamable HTTP). Send your token in the header `Authorization: Bearer bbml_...`.
 
 Claude Code:
 
@@ -70,10 +72,11 @@ claude mcp add boom-local -e BABAMUL_API_URL=<site>/api/babamul -e BABAMUL_API_T
 
 ## Troubleshooting
 
-- **"The site URL should start with https://"**: copy the whole URL from the slip, `https://` included. Check that `SESSION_BOOM_URL` is not set to something else in your shell; the environment wins over `.env`.
-- **"Babamul rejected the API token"**: you are using your Day 1 token, or the seat token has a typo. Use the one from your slip. The message mentions `BABAMUL_ENV`, which you can ignore here.
-- **"Could not reach <site>/mcp", or the site does not load**: check the URL against the slip. If the tunnel restarts, the URL changes. Ask Leo for the new one.
+- **"The site URL should start with https://"**: copy the whole URL, `https://` included. Check that `SESSION_BOOM_URL` is not set to something else in your shell; the environment wins over `.env`.
+- **"Babamul rejected the API token"**: you are using your Day 1 token, or the token has a typo. Use the one from your slip or the one you made on your Profile page. The message mentions `BABAMUL_ENV`, which you can ignore here.
+- **"Could not reach <site>/mcp", or the site does not load**: check the URL against the slide. If the tunnel restarts, the URL changes. Ask Leo for the new one.
 - **"The server stopped answering"**: the tunnel gives up on a request after about 100 seconds. Use a shorter time window or more cuts. If every request fails, ask Leo whether the URL changed.
+- **The assistant answers without any tool chips, or makes up results**: in a long conversation it can stop calling tools. Start a new chat and ask again.
 - **"Waiting for the model, 3 questions ahead of you"**: the room shares one model, so questions wait in line. If it says the assistant is busy, try again in a few minutes.
 - **`No module named 'mcp'` or `'boom_mcp'`**: run the install cell, and check that the kernel is `rubin-ml-school`. If an import fails right after the install, restart the kernel.
 - **`cannot import name 'Client' from 'mcp.client'`**: you have an old `mcp` (1.x). Run `pip install -U "mcp>=2.3,<3"` and restart the kernel.
