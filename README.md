@@ -3,7 +3,7 @@
 **Monday November 9 – Wednesday November 11, 2026**
 School of Physics and Astronomy, University of Minnesota, John T. Tate Hall, 116 Church St SE, Minneapolis, MN 55455
 
-This repository holds the schedule, setup instructions, and tutorial notebooks of a three-day LINCC Frameworks training school on transient classification, anomaly detection, and similarity search in astronomical alert streams. Participants build each workflow on labeled Zwicky Transient Facility (ZTF) alerts during the first two days, run models inside the BOOM alert broker, and transfer their workflows to Rubin Data Preview 2 (DP2) in Hyrax during a hackathon on the third day. The school website is in [`docs/`](docs/index.html) and is served through GitHub Pages.
+This repository holds the schedule, setup instructions, and tutorial notebooks of a three-day LINCC Frameworks training school on transient classification, anomaly detection, and similarity search in astronomical alert streams. Participants build each workflow on labeled Zwicky Transient Facility (ZTF) alerts during the first two days, filter live alerts through the BOOM alert broker, and transfer their workflows to Rubin Data Preview 2 (DP2) in Hyrax during a hackathon on the third day. The school website is in [`docs/`](docs/index.html) and is served through GitHub Pages.
 
 The school is supported by the [LSST Discovery Alliance](https://lsstdiscoveryalliance.org/) through the LINCC Frameworks Community Events program.
 
@@ -31,21 +31,21 @@ python -m ipykernel install --user --name rubin-ml-school
 
 All times are Central Time (CT). Every day opens with **Coffee & Pastries, 9:00–9:30 AM** and ends by **4:00 PM**. Sessions on Monday, Tuesday, and Wednesday morning take place in room 401-20, and the Wednesday afternoon hackathon takes place in room B55.
 
-### Day 1, Monday November 9: Alert Brokers, Hyrax, and Models in BOOM
+### Day 1, Monday November 9: Alert Brokers and Hyrax
 
 | Time        | Session | Material |
 |-------------|---------|----------|
 | 9:00–9:30   | Coffee & Pastries | |
 | 9:30–9:45   | **Welcome and introduction**: Argyro Sasli & Michael Coughlin | |
 | 9:45–10:25  | **Lecture: ZTF and Rubin alert streams with BOOM**: Sushant Sharma Chaudhary | [`day1/01_boom_alert_streams`](day1/01_boom_alert_streams) |
-| 10:25–11:05 | **BABAMUL and its various features**: Thomas Culino | [`day1/01_boom_alert_streams`](day1/01_boom_alert_streams) |
+| 10:25–11:05 | **Lecture: Babamul and its features**: Thomas Culino | [`day1/02_babamul`](day1/02_babamul) |
 | 11:05–11:15 | Break | |
-| 11:15–12:15 | **Lecture and demo: Hyrax, machine learning in the LINCC ecosystem**: Drew Oldag | [`day1/02_hyrax`](day1/02_hyrax) |
+| 11:15–12:15 | **Lecture and demo: Hyrax, machine learning in the LINCC ecosystem**: Drew Oldag | [`day1/03_hyrax`](day1/03_hyrax) |
 | 12:15–1:15  | Lunch | |
-| 1:15–2:30   | **Activity: BABAMUL api usage and alert filtering**: Thomas Culino | [`day1/03_onnx_in_boom`](day1/03_onnx_in_boom) |
+| 1:15–2:30   | **Activity: Babamul API usage and alert filtering**: Thomas Culino | [`day1/02_babamul`](day1/02_babamul) |
 | 2:30–2:45   | Break | |
-| 2:45–3:30   | **Activity: Hyrax hands-on, setting up the ZTF light-curve dataset** | [`day1/02_hyrax`](day1/02_hyrax) |
-| 3:30–4:00   | **Activity: Hyrax hands-on, training a light-curve model on ZTF**: Drew Oldag | [`day1/02_hyrax`](day1/02_hyrax) |
+| 2:45–3:30   | **Activity: Hyrax hands-on, setting up the ZTF light-curve dataset** | [`day1/03_hyrax`](day1/03_hyrax) |
+| 3:30–4:00   | **Activity: Hyrax hands-on, training a light-curve model on ZTF**: Drew Oldag | [`day1/03_hyrax`](day1/03_hyrax) |
 
 ### Day 2, Tuesday November 10: Classification, Anomaly Detection, Similarity Search, and MCP Servers
 
@@ -85,9 +85,9 @@ Rubin-ML-Training-School/
 ├── requirements.txt              the same packages for pip
 ├── setup/                        before-the-school instructions, .env template, setup check
 ├── day1/
-│   ├── 01_boom_alert_streams/    BOOM lecture and filtering activity (Thomas Culino)
-│   ├── 02_hyrax/                 Hyrax lecture, demo, and hands-on (Drew Oldag)
-│   └── 03_onnx_in_boom/          ONNX models in BOOM (Sushant Sharma Chaudhary)
+│   ├── 01_boom_alert_streams/    ZTF and Rubin alert streams with BOOM (Sushant Sharma Chaudhary)
+│   ├── 02_babamul/               Babamul features, API usage, and alert filtering (Thomas Culino)
+│   └── 03_hyrax/                 Hyrax lecture, demo, and hands-on (Drew Oldag)
 ├── day2/
 │   ├── 01_applecider_classification/   AppleCiDEr classification (Argyro Sasli)
 │   ├── 02_anomaly_detection/           AppleCiDEr and LUNA anomaly detection (Argyro Sasli)
@@ -108,7 +108,7 @@ DP2 is proprietary to Rubin data-rights holders. DP2 data, including light curve
 
 ## Organizers and contact
 
-The school is organized by Argyro Sasli and Michael Coughlin (University of Minnesota) with Drew Oldag (LINCC Frameworks). Questions go to [asasli@umn.edu](mailto:asasli@umn.edu).
+The school is organized by Argyro Sasli, Michael Coughlin, Drew Oldag, Sushant Sharma Chaudhary, Sneha Maharjan, Sougat Dasgupta, Vaidehi Gupta, Tyler Barna, and Hal Yngve. Questions go to [asasli@umn.edu](mailto:asasli@umn.edu).
 
 ## License
 

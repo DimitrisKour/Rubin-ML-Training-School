@@ -1,0 +1,18 @@
+# Credentials
+.env
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Data and model outputs (DP2 data stays on the Rubin Science Platform)
+data/
+*.parquet
+*.ckpt
+*.pt
+results/
+runs/
+
+# macOS
+.DS_Store

@@ -32,7 +32,7 @@ The Day 3 hackathon runs on DP2 catalogs on the Rubin Science Platform.
 
 Participants without Rubin data rights work on ZTF data or on live Rubin alerts through Babamul during the hackathon, and do not need this step.
 
-## 3. Software on your laptop or on MSI
+## 3. Software on your laptop
 
 Create the school environment with conda (or mamba) and register it as a Jupyter kernel:
 
@@ -46,7 +46,7 @@ python -m ipykernel install --user --name rubin-ml-school
 
 With plain pip in a fresh virtual environment, `pip install -r requirements.txt` installs the same packages.
 
-Compute for training is provided through the Minnesota Supercomputing Institute (MSI), and access details are sent to participants by email. Bring a laptop with a recent web browser and a terminal.
+Bring a laptop with a recent web browser and a terminal.
 
 ## 4. Check your setup
 
