@@ -4,12 +4,17 @@
 
 An MCP server gives a language model tools it can call. In this session you use one for BOOM: alert search, light curves, cutouts, cross-matches and similar objects. You try it in the browser and from Python, write the agent loop yourself, and add your own model as a tool.
 
-Everything runs on our own BOOM and Babamul, set up for this session. Below, `<site>` is the site URL shown on the slide (it is also on the paper slips).
+Everything runs on our own BOOM and Babamul, set up for this session. The site is:
+
+```
+https://swaziland-tokyo-cargo-seeking.trycloudflare.com
+```
+
+Below, `<site>` means that URL. It is also on the slide and on the paper slips. If the tunnel restarts during the session the URL changes, and the slide will show the new one.
 
 ## What to bring
 
 - Your laptop with the `rubin-ml-school` environment from Day 1.
-- The site URL (`https://<something>.trycloudflare.com`), shown on the slide.
 - A way to sign in on the site: your Google account, or the paper slip from your seat, which has an email and a password.
 - A Babamul token that starts with `bbml_`, for the notebook and MCP clients. The slip has one. If you sign in with Google, make one on the site: open your account menu, then **Profile**, then **Create New** under **API Tokens**, and copy the token when it appears.
 
