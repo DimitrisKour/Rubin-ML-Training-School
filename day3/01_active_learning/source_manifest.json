@@ -2,10 +2,9 @@
   "content": {
     "01_active_learning_digits.ipynb": "e7b26bfa8e11b125d45194a41e311fb5f41e586bd59397d7a576c3b8fd38e858",
     "02_applecider_astronomy_active_learning.ipynb": "83ab4f808b1117890e688de71aabce941a99a1d613a74f35f72e846cd42647b4",
-    "LICENSE_AL_PIPELINE": "b1bf2d2d2033c91410bdb50ca0feba6798fbbf7605c2947f26977a42341d3bb0",
-    "README.md": "1ba99429d8bbadbfc83153512ba5fe0c3329c450b4bd345eeb8c158276d50114",
+    "README.md": "1bcf1af4baa5c1e5b2ddeeff30b47ebeee81a523560692ca0784d3932d51b1eb",
     "run_notebooks.py": "f5dbd50e248e0e6249b1c5cac46cbc869c192cb3f202fac04ac5355ddf470560",
-    "teaching_data/README.md": "3acc24d94f1c98ca854c7ae72a691ac4221922c4ef8953cc298874dd7f221cb0",
+    "teaching_data/README.md": "30f6f7bc3ce0326874ac2861464e1872d3104a58a5e7b8585843db589068d1e6",
     "teaching_data/astro_cycle2_overlap_by_seed.csv": "31b58a2075a2093a9af1a14d147502dde65d340d1ca02ebfd908302ea281fb44",
     "teaching_data/astro_cycle2_overlap_mean.csv": "e6c0d7beaa7cedcf0e6c8e0da172e649c3faa8c2db919e02b84a439be4d58bb5",
     "teaching_data/astro_cycle2_overlap_provenance.json": "7b330bb5d8355620ee298fc8fccbeaf061bb2c917e4a0176e38c85c7f45f6acc",
